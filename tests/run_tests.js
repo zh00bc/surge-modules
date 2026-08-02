@@ -880,10 +880,11 @@ function testDictionaryInjectorAddsLookupOverlayToHtml() {
   assertIncludes(result.body, "--surge-dict-active-color:#111");
   assertIncludes(result.body, "color:#007aff");
   assertIncludes(result.body, "border:1px solid rgba(0,122,255,.16)");
-  assertIncludes(result.body, "M5.6 4.8h7.15");
-  assertIncludes(result.body, "M8.05 4.8v13.05");
-  assertIncludes(result.body, "cx=\\\"16.35\\\" cy=\\\"16.35\\\" r=\\\"3.05\\\"");
-  assertIncludes(result.body, ".surge-dict-lookup-icon .surge-dict-book{fill:rgba(0,122,255,.08);stroke:currentColor;}");
+  assertIncludes(result.body, "viewBox=\\\"0 0 121.7 122.88\\\"");
+  assertIncludes(result.body, "M84.2 84.7 110.4 113.25");
+  assertIncludes(result.body, "cx=\\\"53.62\\\" cy=\\\"53.62\\\" r=\\\"47.64\\\"");
+  assertIncludes(result.body, ".surge-dict-lookup-icon .surge-dict-find-handle{fill:none;stroke:#007aff;stroke-width:23;stroke-linecap:round;");
+  assertIncludes(result.body, ".surge-dict-lookup-icon .surge-dict-find-lens{fill:#90caf8;stroke:#007aff;stroke-width:11.96;}");
   assertIncludes(result.body, "min-height:44px");
   assertIncludes(result.body, "height:44px");
   assertIncludes(result.body, "text-decoration:none");
@@ -931,6 +932,8 @@ function testDictionaryInjectorAddsLookupOverlayToHtml() {
   assertNotIncludes(result.body, "M17.7 2.45 18.34 4.06");
   assertNotIncludes(result.body, "cx=\\\"13.95\\\" cy=\\\"13.95\\\" r=\\\"5.15\\\"");
   assertNotIncludes(result.body, "surge-dict-sparkle");
+  assertNotIncludes(result.body, "surge-dict-book");
+  assertNotIncludes(result.body, "surge-dict-page");
   assertNotIncludes(result.body, "M10.65 6.2c.38 2.2");
   assertNotIncludes(result.body, ".surge-dict-tabs button.is-active:before");
   assertNotIncludes(result.body, "border-bottom:4px solid var(--surge-dict-active-color)");

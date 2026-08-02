@@ -40,13 +40,10 @@
   function iconSvg(name) {
     var icons = {
       lookup: [
-        "<svg class=\"surge-dict-icon surge-dict-lookup-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\">",
-        "<path class=\"surge-dict-book\" d=\"M5.6 4.8h7.15a2.45 2.45 0 0 1 2.45 2.45v10.9H7.85a2.25 2.25 0 0 1-2.25-2.25V4.8Z\"/>",
-        "<path class=\"surge-dict-page\" d=\"M8.05 4.8v13.05\"/>",
-        "<path class=\"surge-dict-page\" d=\"M9.95 8.05h2.75\"/>",
-        "<path class=\"surge-dict-page\" d=\"M9.95 10.75h2.1\"/>",
-        "<circle class=\"surge-dict-glass\" cx=\"16.35\" cy=\"16.35\" r=\"3.05\"/>",
-        "<path class=\"surge-dict-glass\" d=\"m18.55 18.55 2.05 2.05\"/>",
+        "<svg class=\"surge-dict-icon surge-dict-lookup-icon\" viewBox=\"0 0 121.7 122.88\" aria-hidden=\"true\">",
+        "<path class=\"surge-dict-find-handle\" d=\"M84.2 84.7 110.4 113.25\"/>",
+        "<circle class=\"surge-dict-find-lens\" cx=\"53.62\" cy=\"53.62\" r=\"47.64\"/>",
+        "<path class=\"surge-dict-find-highlight\" d=\"M29.13 45.74c-.99 2.1-3.49 3-5.59 2.01-2.1-.99-3-3.49-2.01-5.59 1.53-3.22 3.36-6.25 5.5-9.08 2.13-2.81 4.59-5.45 7.39-7.92 1.73-1.53 4.39-1.37 5.92.36 1.53 1.73 1.37 4.39-.36 5.92-2.33 2.06-4.41 4.3-6.23 6.7-1.81 2.39-3.35 4.92-4.62 7.6Z\"/>",
         "</svg>"
       ].join(""),
       close: [
@@ -322,8 +319,9 @@
     "#surge-dictionary-lookup:active{transform:scale(.96);background:rgba(0,122,255,.08);box-shadow:0 6px 18px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.9);}",
     ".surge-dict-icon{display:block;width:20px;height:20px;margin:auto;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}",
     ".surge-dict-lookup-icon{width:24px;height:24px;stroke-width:1.9;}",
-    ".surge-dict-lookup-icon .surge-dict-book{fill:rgba(0,122,255,.08);stroke:currentColor;}",
-    ".surge-dict-lookup-icon .surge-dict-page,.surge-dict-lookup-icon .surge-dict-glass{fill:none;stroke:currentColor;}",
+    ".surge-dict-lookup-icon .surge-dict-find-handle{fill:none;stroke:#007aff;stroke-width:23;stroke-linecap:round;stroke-linejoin:round;}",
+    ".surge-dict-lookup-icon .surge-dict-find-lens{fill:#90caf8;stroke:#007aff;stroke-width:11.96;}",
+    ".surge-dict-lookup-icon .surge-dict-find-highlight{fill:#fff;stroke:none;}",
     "#surge-dictionary-popup{--surge-dict-active-color:#111;position:fixed;display:none;z-index:2147483647;left:max(10px,env(safe-area-inset-left));right:max(10px,env(safe-area-inset-right));bottom:max(10px,env(safe-area-inset-bottom));height:min(680px,76vh);background:#fff;color:#111;border:1px solid rgba(0,0,0,.12);border-radius:18px;box-shadow:0 24px 80px rgba(0,0,0,.32);overflow:hidden;font:14px/1.35 system-ui,sans-serif;letter-spacing:0;}",
     "#surge-dictionary-popup *{box-sizing:border-box;}",
     ".surge-dict-shell{display:flex;flex-direction:column;width:100%;height:100%;}",
