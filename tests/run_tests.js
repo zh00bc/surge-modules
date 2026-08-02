@@ -878,10 +878,12 @@ function testDictionaryInjectorAddsLookupOverlayToHtml() {
   assertIncludes(result.body, "surge-dict-lookup-icon");
   assertIncludes(result.body, "border-bottom:1px solid rgba(0,0,0,.1)");
   assertIncludes(result.body, "--surge-dict-active-color:#111");
-  assertIncludes(result.body, "cx=\\\"10.65\\\" cy=\\\"10.25\\\" r=\\\"6.05\\\"");
-  assertIncludes(result.body, "m15.1 14.7 4.7 4.7");
-  assertIncludes(result.body, "M10.65 6.2c.38 2.2");
-  assertIncludes(result.body, ".surge-dict-lookup-icon .surge-dict-sparkle{fill:currentColor;stroke:none;}");
+  assertIncludes(result.body, "color:#007aff");
+  assertIncludes(result.body, "border:1px solid rgba(0,122,255,.16)");
+  assertIncludes(result.body, "M5.6 4.8h7.15");
+  assertIncludes(result.body, "M8.05 4.8v13.05");
+  assertIncludes(result.body, "cx=\\\"16.35\\\" cy=\\\"16.35\\\" r=\\\"3.05\\\"");
+  assertIncludes(result.body, ".surge-dict-lookup-icon .surge-dict-book{fill:rgba(0,122,255,.08);stroke:currentColor;}");
   assertIncludes(result.body, "min-height:44px");
   assertIncludes(result.body, "height:44px");
   assertIncludes(result.body, "text-decoration:none");
@@ -928,6 +930,8 @@ function testDictionaryInjectorAddsLookupOverlayToHtml() {
   assertNotIncludes(result.body, "M7.2 2.45 8.72 6.2");
   assertNotIncludes(result.body, "M17.7 2.45 18.34 4.06");
   assertNotIncludes(result.body, "cx=\\\"13.95\\\" cy=\\\"13.95\\\" r=\\\"5.15\\\"");
+  assertNotIncludes(result.body, "surge-dict-sparkle");
+  assertNotIncludes(result.body, "M10.65 6.2c.38 2.2");
   assertNotIncludes(result.body, ".surge-dict-tabs button.is-active:before");
   assertNotIncludes(result.body, "border-bottom:4px solid var(--surge-dict-active-color)");
   assertNotIncludes(result.body, "surge-dict-title");

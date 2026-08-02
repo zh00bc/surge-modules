@@ -41,9 +41,12 @@
     var icons = {
       lookup: [
         "<svg class=\"surge-dict-icon surge-dict-lookup-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\">",
-        "<circle class=\"surge-dict-glass\" cx=\"10.65\" cy=\"10.25\" r=\"6.05\"/>",
-        "<path class=\"surge-dict-glass\" d=\"m15.1 14.7 4.7 4.7\"/>",
-        "<path class=\"surge-dict-sparkle\" d=\"M10.65 6.2c.38 2.2 1.52 3.35 3.72 3.72-2.2.38-3.34 1.52-3.72 3.72-.38-2.2-1.52-3.34-3.72-3.72 2.2-.37 3.34-1.52 3.72-3.72Z\"/>",
+        "<path class=\"surge-dict-book\" d=\"M5.6 4.8h7.15a2.45 2.45 0 0 1 2.45 2.45v10.9H7.85a2.25 2.25 0 0 1-2.25-2.25V4.8Z\"/>",
+        "<path class=\"surge-dict-page\" d=\"M8.05 4.8v13.05\"/>",
+        "<path class=\"surge-dict-page\" d=\"M9.95 8.05h2.75\"/>",
+        "<path class=\"surge-dict-page\" d=\"M9.95 10.75h2.1\"/>",
+        "<circle class=\"surge-dict-glass\" cx=\"16.35\" cy=\"16.35\" r=\"3.05\"/>",
+        "<path class=\"surge-dict-glass\" d=\"m18.55 18.55 2.05 2.05\"/>",
         "</svg>"
       ].join(""),
       close: [
@@ -315,12 +318,12 @@
   var style = document.createElement("style");
   style.setAttribute("data-surge-dictionary-overlay", "1");
   style.textContent = [
-    "#surge-dictionary-lookup{position:fixed;display:none;z-index:2147483647;width:46px;height:46px;padding:0;border:1px solid rgba(0,0,0,.08);border-radius:999px;background:rgba(255,255,255,.9);box-shadow:0 10px 26px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.86);color:#111;font:600 14px/1 system-ui,sans-serif;letter-spacing:0;text-align:center;-webkit-tap-highlight-color:transparent;touch-action:manipulation;backdrop-filter:saturate(180%) blur(18px);-webkit-backdrop-filter:saturate(180%) blur(18px);}",
-    "#surge-dictionary-lookup:active{transform:scale(.96);background:#fff;box-shadow:0 6px 18px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.9);}",
+    "#surge-dictionary-lookup{position:fixed;display:none;z-index:2147483647;width:46px;height:46px;padding:0;border:1px solid rgba(0,122,255,.16);border-radius:999px;background:rgba(255,255,255,.92);box-shadow:0 10px 26px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.88);color:#007aff;font:600 14px/1 system-ui,sans-serif;letter-spacing:0;text-align:center;-webkit-tap-highlight-color:transparent;touch-action:manipulation;backdrop-filter:saturate(180%) blur(18px);-webkit-backdrop-filter:saturate(180%) blur(18px);}",
+    "#surge-dictionary-lookup:active{transform:scale(.96);background:rgba(0,122,255,.08);box-shadow:0 6px 18px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.9);}",
     ".surge-dict-icon{display:block;width:20px;height:20px;margin:auto;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}",
-    ".surge-dict-lookup-icon{width:23px;height:23px;stroke-width:2.35;}",
-    ".surge-dict-lookup-icon .surge-dict-sparkle{fill:currentColor;stroke:none;}",
-    ".surge-dict-lookup-icon .surge-dict-glass{fill:none;stroke:currentColor;}",
+    ".surge-dict-lookup-icon{width:24px;height:24px;stroke-width:1.9;}",
+    ".surge-dict-lookup-icon .surge-dict-book{fill:rgba(0,122,255,.08);stroke:currentColor;}",
+    ".surge-dict-lookup-icon .surge-dict-page,.surge-dict-lookup-icon .surge-dict-glass{fill:none;stroke:currentColor;}",
     "#surge-dictionary-popup{--surge-dict-active-color:#111;position:fixed;display:none;z-index:2147483647;left:max(10px,env(safe-area-inset-left));right:max(10px,env(safe-area-inset-right));bottom:max(10px,env(safe-area-inset-bottom));height:min(680px,76vh);background:#fff;color:#111;border:1px solid rgba(0,0,0,.12);border-radius:18px;box-shadow:0 24px 80px rgba(0,0,0,.32);overflow:hidden;font:14px/1.35 system-ui,sans-serif;letter-spacing:0;}",
     "#surge-dictionary-popup *{box-sizing:border-box;}",
     ".surge-dict-shell{display:flex;flex-direction:column;width:100%;height:100%;}",
