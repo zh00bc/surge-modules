@@ -1,0 +1,13 @@
+{
+  "name": "surge-modules",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Generated Surge modules for news-site cleanup and in-page reading tools.",
+  "scripts": {
+    "build": "node scripts/build.js && node scripts/build_dictionary.js",
+    "test": "node tests/run_tests.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

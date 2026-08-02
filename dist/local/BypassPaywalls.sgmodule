@@ -1,0 +1,65 @@
+#!name=Bypass Paywalls for Surge
+#!desc=Module-first, BPC-inspired request blocking, header rewrites, and light cosmetic cleanup for selected news sites. Enable Surge MITM certificate first.
+#!author=LFA
+#!requirement=CORE_VERSION>=20
+#!generated-from=sites.config.js via scripts/build.js
+
+[URL Rewrite]
+# Pure URL blocks from the BPC site rules.
+^https:\/\/(?:[^\/]+\.)?economist\.com\/zephr\/feature _ reject
+^https:\/\/(?:[^\/]+\.)?economist\.com\/(?:latest\/wall-ui|script)\.js(?:[?#]|$) _ reject
+^https:\/\/www\.theatlantic\.com\/zephr\/ _ reject
+^https:\/\/meter-svc\.nytimes\.com\/meter\.js(?:[?#]|$) _ reject
+^https:\/\/(?:www\.)?nytimes\.com\/svc\/onsite-messaging\/query(?:[?#]|$) _ reject
+^https:\/\/mwcm\.nyt\.com\/.+\.js(?:[?#]|$) _ reject
+^https:\/\/cooking\.nytimes\.com\/api\/.+\/access(?:[?#]|$) _ reject
+^https:\/\/(?:[^\/]+\.)?washingtonpost\.com\/.+\/tetro-client\/ _ reject
+
+[Header Rewrite]
+# Header rewrites that do not require request context.
+
+# Let Body Rewrite adjust HTML safely.
+http-response ^https:\/\/(?:www\.)?economist\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) header-del Content-Length
+http-response ^https:\/\/(?:www\.)?economist\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) header-del Content-Security-Policy
+http-response ^https:\/\/(?:www\.)?economist\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) header-del Content-Security-Policy-Report-Only
+http-response ^https:\/\/www\.newyorker\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) header-del Content-Length
+http-response ^https:\/\/www\.newyorker\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) header-del Content-Security-Policy
+http-response ^https:\/\/www\.newyorker\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) header-del Content-Security-Policy-Report-Only
+http-response ^https:\/\/www\.theatlantic\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) header-del Content-Length
+http-response ^https:\/\/www\.theatlantic\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) header-del Content-Security-Policy
+http-response ^https:\/\/www\.theatlantic\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) header-del Content-Security-Policy-Report-Only
+http-response ^https:\/\/(?:www\.)?nytimes\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) header-del Content-Length
+http-response ^https:\/\/(?:www\.)?nytimes\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) header-del Content-Security-Policy
+http-response ^https:\/\/(?:www\.)?nytimes\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) header-del Content-Security-Policy-Report-Only
+http-response ^https:\/\/(?:(?:www|amp)\.)?scmp\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) header-del Content-Length
+http-response ^https:\/\/(?:(?:www|amp)\.)?scmp\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) header-del Content-Security-Policy
+http-response ^https:\/\/(?:(?:www|amp)\.)?scmp\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) header-del Content-Security-Policy-Report-Only
+http-response ^https:\/\/(?:www\.)?wsj\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) header-del Content-Length
+http-response ^https:\/\/(?:www\.)?wsj\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) header-del Content-Security-Policy
+http-response ^https:\/\/(?:www\.)?wsj\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) header-del Content-Security-Policy-Report-Only
+http-response ^https:\/\/(?:www\.)?washingtonpost\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) header-del Content-Length
+http-response ^https:\/\/(?:www\.)?washingtonpost\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) header-del Content-Security-Policy
+http-response ^https:\/\/(?:www\.)?washingtonpost\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) header-del Content-Security-Policy-Report-Only
+
+[Body Rewrite]
+# CSS-only cosmetics. No runtime DOM mutation, so hydration stays under the site's control.
+http-response ^https:\/\/(?:www\.)?economist\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) </head> <!--surge-bpc-cosmetic:economist--><style>div[class^="adComponent_advert__"],div[class^="adComponent_adcontainer__"],div[data-testid="right-hand-rail-ads"],div#airship-masthead-banner,div[id^="econ-"],div[id^="econtop-"],div[id^="econright-"]{display:none!important}</style></head>
+http-response ^https:\/\/www\.newyorker\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) </head> <!--surge-bpc-cosmetic:newyorker--><style>div.ad,div[class*="AdWrapper-"],div[class*="StickyMidContentAdWrapper-"],div[class*="AdsSpacer-"],aside.paywall-bar,div[class^="MessageBannerWrapper-"],div.ad-stickyhero,div.ad_wrapper{display:none!important}</style></head>
+http-response ^https:\/\/www\.theatlantic\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) </head> <!--surge-bpc-cosmetic:theatlantic--><style>aside#paywall,div[class^="LostInventoryMessage_"]{display:none!important}</style></head>
+http-response ^https:\/\/(?:www\.)?nytimes\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) </head> <!--surge-bpc-cosmetic:nytimes--><style>div#dock-container,div#top-wrapper,div#bottom-wrapper,div[class$="ad-wrapper"],div[class^="adunit_"],div[data-testid^="Dropzone-"]{display:none!important}</style></head>
+http-response ^https:\/\/(?:(?:www|amp)\.)?scmp\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) </head> <!--surge-bpc-cosmetic:scmp--><style>div[data-qa="GenericArticle-PaywallContainer"],div.js-reading-0-percent-completion-tracker,div[id^="default-meter-page-views"],div.ad-banner,div.advert-fly-carpet-container,div.inline-advert{display:none!important}</style></head>
+http-response ^https:\/\/(?:www\.)?wsj\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) </head> <!--surge-bpc-cosmetic:wsj--><style>.snippet-promotion,div[id*="-snippet-overlay"],div.wsj-ad,div.adWrapper,div.css-xgokil-Box,div#cx-article-cover-overlay,div#dianomi-module{display:none!important}</style></head>
+http-response ^https:\/\/(?:www\.)?washingtonpost\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) </head> <!--surge-bpc-cosmetic:washingtonpost--><style>div[data-qa$="-ad"],div#leaderboard-wrapper,div[data-qa="subscribe-promo"]{display:none!important}img,div.aspect-custom,div.aspect-custom>*{filter:none!important}</style></head>
+
+[Script]
+# Only contexts that Surge's declarative rules cannot express stay in JS.
+BloombergGuardedRequest = type=http-request, pattern=^https:\/\/[^\/]+\.bwbx\.io\/s3\/fence\/fortress-client\/, script-path=BypassPaywalls/guarded_request.js, argument=site=bloomberg, timeout=3
+EconomistGuardedRequest = type=http-request, pattern=^https:\/\/(?:[^\/]+\.)?economist\.com\/, script-path=BypassPaywalls/guarded_request.js, argument=site=economist, timeout=3
+NewYorkerGuardedRequest = type=http-request, pattern=^https:\/\/www\.newyorker\.com\/[-\w]+$, script-path=BypassPaywalls/guarded_request.js, argument=site=newyorker, timeout=3
+NewYorkTimesGuardedRequest = type=http-request, pattern=^https:\/\/(?:www\.)?nytimes\.com\/(?!games\/), script-path=BypassPaywalls/guarded_request.js, argument=site=nytimes, timeout=3
+ScmpGuardedRequest = type=http-request, pattern=^https:\/\/(?:[^\/]+\.)?tinypass\.com\/|^https:\/\/cdn\.ampproject\.org\/v0\/amp-(?:access|subscriptions)-, script-path=BypassPaywalls/guarded_request.js, argument=site=scmp, timeout=3
+WallStreetJournalGuardedRequest = type=http-request, pattern=^https:\/\/(?:www\.)?wsj\.com\/, script-path=BypassPaywalls/guarded_request.js, argument=site=wsj, timeout=3
+WashingtonPostGuardedRequest = type=http-request, pattern=^https:\/\/(?:www\.)?washingtonpost\.com\/, script-path=BypassPaywalls/guarded_request.js, argument=site=washingtonpost, timeout=3
+
+[MITM]
+hostname = %APPEND% bloomberg.com, *.bloomberg.com, *.bwbx.io, economist.com, *.economist.com, www.newyorker.com, www.theatlantic.com, nytimes.com, *.nytimes.com, mwcm.nyt.com, scmp.com, *.scmp.com, *.tinypass.com, cdn.ampproject.org, wsj.com, *.wsj.com, washingtonpost.com, *.washingtonpost.com

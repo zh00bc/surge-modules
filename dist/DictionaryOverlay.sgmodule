@@ -1,0 +1,38 @@
+#!name=Dictionary Overlay
+#!desc=Page selection lookup popup for configured news sites. Shows online dictionary tabs inside the current page after tapping the lookup button.
+#!author=LFA
+#!requirement=CORE_VERSION>=20
+#!generated-from=dictionary.config.js via scripts/build_dictionary.js
+
+[Header Rewrite]
+# Let online dictionary pages render inside the in-page iframe tabs.
+http-response ^https:\/\/dictionary\.cambridge\.org\/ header-del X-Frame-Options
+http-response ^https:\/\/dictionary\.cambridge\.org\/ header-del Frame-Options
+http-response ^https:\/\/dictionary\.cambridge\.org\/ header-del Content-Security-Policy
+http-response ^https:\/\/dictionary\.cambridge\.org\/ header-del Content-Security-Policy-Report-Only
+http-response ^https:\/\/www\.merriam-webster\.com\/ header-del X-Frame-Options
+http-response ^https:\/\/www\.merriam-webster\.com\/ header-del Frame-Options
+http-response ^https:\/\/www\.merriam-webster\.com\/ header-del Content-Security-Policy
+http-response ^https:\/\/www\.merriam-webster\.com\/ header-del Content-Security-Policy-Report-Only
+http-response ^https:\/\/www\.collinsdictionary\.com\/ header-del X-Frame-Options
+http-response ^https:\/\/www\.collinsdictionary\.com\/ header-del Frame-Options
+http-response ^https:\/\/www\.collinsdictionary\.com\/ header-del Content-Security-Policy
+http-response ^https:\/\/www\.collinsdictionary\.com\/ header-del Content-Security-Policy-Report-Only
+http-response ^https:\/\/www\.vocabulary\.com\/ header-del X-Frame-Options
+http-response ^https:\/\/www\.vocabulary\.com\/ header-del Frame-Options
+http-response ^https:\/\/www\.vocabulary\.com\/ header-del Content-Security-Policy
+http-response ^https:\/\/www\.vocabulary\.com\/ header-del Content-Security-Policy-Report-Only
+
+[Script]
+# Injects a small page overlay on selected HTML documents only.
+BloombergDictionaryOverlay = type=http-response, pattern=^https:\/\/(?:www\.)?bloomberg\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)), requires-body=1, max-size=0, timeout=3, script-path=https://raw.githubusercontent.com/zh00bc/surge-modules/main/dist/DictionaryOverlay/inject_response.js, script-update-interval=86400
+EconomistDictionaryOverlay = type=http-response, pattern=^https:\/\/(?:www\.)?economist\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)), requires-body=1, max-size=0, timeout=3, script-path=https://raw.githubusercontent.com/zh00bc/surge-modules/main/dist/DictionaryOverlay/inject_response.js, script-update-interval=86400
+NewYorkerDictionaryOverlay = type=http-response, pattern=^https:\/\/www\.newyorker\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)), requires-body=1, max-size=0, timeout=3, script-path=https://raw.githubusercontent.com/zh00bc/surge-modules/main/dist/DictionaryOverlay/inject_response.js, script-update-interval=86400
+AtlanticDictionaryOverlay = type=http-response, pattern=^https:\/\/www\.theatlantic\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)), requires-body=1, max-size=0, timeout=3, script-path=https://raw.githubusercontent.com/zh00bc/surge-modules/main/dist/DictionaryOverlay/inject_response.js, script-update-interval=86400
+NewYorkTimesDictionaryOverlay = type=http-response, pattern=^https:\/\/(?:www\.)?nytimes\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)), requires-body=1, max-size=0, timeout=3, script-path=https://raw.githubusercontent.com/zh00bc/surge-modules/main/dist/DictionaryOverlay/inject_response.js, script-update-interval=86400
+SouthChinaMorningPostDictionaryOverlay = type=http-response, pattern=^https:\/\/(?:(?:www|amp)\.)?scmp\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)), requires-body=1, max-size=0, timeout=3, script-path=https://raw.githubusercontent.com/zh00bc/surge-modules/main/dist/DictionaryOverlay/inject_response.js, script-update-interval=86400
+WallStreetJournalDictionaryOverlay = type=http-response, pattern=^https:\/\/(?:www\.)?wsj\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)), requires-body=1, max-size=0, timeout=3, script-path=https://raw.githubusercontent.com/zh00bc/surge-modules/main/dist/DictionaryOverlay/inject_response.js, script-update-interval=86400
+WashingtonPostDictionaryOverlay = type=http-response, pattern=^https:\/\/(?:www\.)?washingtonpost\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)), requires-body=1, max-size=0, timeout=3, script-path=https://raw.githubusercontent.com/zh00bc/surge-modules/main/dist/DictionaryOverlay/inject_response.js, script-update-interval=86400
+
+[MITM]
+hostname = %APPEND% bloomberg.com, www.bloomberg.com, economist.com, www.economist.com, www.newyorker.com, www.theatlantic.com, nytimes.com, www.nytimes.com, scmp.com, www.scmp.com, amp.scmp.com, wsj.com, www.wsj.com, washingtonpost.com, www.washingtonpost.com, dictionary.cambridge.org, www.merriam-webster.com, www.collinsdictionary.com, www.vocabulary.com
