@@ -62,14 +62,14 @@ These modules borrow the shape of two reference projects without copying their i
 
 ## Site Strategy
 
-- Bloomberg: blocks BPC's `bwbx.io/s3/fence/fortress-client/` script only when the request is initiated by Bloomberg; no broad third-party block.
-- The Economist: blocks BPC's Zephr/wall UI scripts and applies BPC's Liskov mobile user agent to document/script/XHR-like requests only.
+- Bloomberg: blocks BPC's latest `bwbx.io/s3/fence/fortress-client/*.css` stylesheet rule only when initiated by Bloomberg, keeps the existing guarded fortress script block for the Surge path, and hides Bloomberg ad wrappers with CSS-only cleanup.
+- The Economist: blocks BPC's Zephr feature endpoint and `latest/wall-ui.js`, applies BPC's Liskov mobile user agent to document/script/XHR-like requests only, and uses the current generic `adComponent` cosmetic selector.
 - New Yorker: BPC-style root script block plus CSS-only ad/paywall-bar hiding. No runtime DOM cleanup.
-- The Atlantic: native URL Rewrite blocks Zephr plus light CSS fallback.
-- New York Times: native URL Rewrite blocks meter, onsite messaging, `mwcm.nyt.com`, and Cooking access; document requests use BPC's Google Inspection Tool user agent. Games paths are excluded.
+- The Atlantic: native URL Rewrite blocks BPC's current Zephr `decision-engine` endpoint plus light CSS fallback.
+- New York Times: native URL Rewrite blocks meter, onsite messaging, `mwcm.nyt.com`, and Cooking access; document requests use BPC's Google Inspection Tool user agent. Games paths are excluded. Cosmetic cleanup includes BPC's current standard ad dropzone selector.
 - South China Morning Post: Tinypass and AMP access/subscription scripts are blocked only when the referer is SCMP; response cleanup is CSS-only.
 - Wall Street Journal: BPC's Drudge referer is applied through a guarded request rule, so asset requests are not rewritten.
-- The Washington Post: blocks BPC's `tetro-client` path and applies BPC's Googlebot headers to document/script/XHR-like requests only.
+- The Washington Post: blocks BPC's `tetro-client` path, applies BPC's Googlebot headers to document/script/XHR-like requests only, and follows the current WaPo ad/outbrain selectors.
 
 ## Workflow
 

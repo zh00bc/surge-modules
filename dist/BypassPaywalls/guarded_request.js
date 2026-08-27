@@ -4,7 +4,19 @@ const SITE_RULES = {
     "excludePatterns": [],
     "blockRequests": [
       {
-        "name": "bloomberg-fortress-client",
+        "name": "bloomberg-fortress-client-css",
+        "pattern": "^https://[^/]+\\.bwbx\\.io/s3/fence/fortress-client/.+\\.css(?:[?#]|$)",
+        "requireRefererDomains": [
+          "bloomberg.com"
+        ],
+        "destinations": [
+          "style"
+        ],
+        "requireDestination": false,
+        "contentType": "text/css; charset=utf-8"
+      },
+      {
+        "name": "bloomberg-fortress-client-script",
         "pattern": "^https://[^/]+\\.bwbx\\.io/s3/fence/fortress-client/",
         "requireRefererDomains": [
           "bloomberg.com"

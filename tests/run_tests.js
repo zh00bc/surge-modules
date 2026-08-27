@@ -136,13 +136,13 @@ function testDomainTemplatesEscapeHostDots() {
   const moduleText = readGeneratedModule();
 
   assertIncludes(moduleText, "^https:\\/\\/(?:[^\\/]+\\.)?economist\\.com\\/zephr\\/feature _ reject");
-  assertIncludes(moduleText, "^https:\\/\\/www\\.theatlantic\\.com\\/zephr\\/ _ reject");
+  assertIncludes(moduleText, "^https:\\/\\/www\\.theatlantic\\.com\\/zephr\\/decision-engine(?:[?#]|$) _ reject");
   assertIncludes(moduleText, "^https:\\/\\/meter-svc\\.nytimes\\.com\\/meter\\.js(?:[?#]|$) _ reject");
   assertIncludes(moduleText, "^https:\\/\\/cooking\\.nytimes\\.com\\/api\\/.+\\/access(?:[?#]|$) _ reject");
   assertIncludes(moduleText, "^https:\\/\\/(?:[^\\/]+\\.)?washingtonpost\\.com\\/.+\\/tetro-client\\/ _ reject");
 }
 
-function testBloombergFortressIsBlockedWithBloombergReferer() {
+function testBloombergFortressScriptIsBlockedWithBloombergReferer() {
   const result = runSurgeScript(GUARDED_REQUEST_OUTPUT_PATH, {
     $argument: "site=bloomberg",
     $request: {
@@ -155,7 +155,24 @@ function testBloombergFortressIsBlockedWithBloombergReferer() {
     }
   });
 
-  assertBlocked(result, "bloomberg-fortress-client");
+  assertBlocked(result, "bloomberg-fortress-client-script");
+}
+
+function testBloombergFortressCssIsBlockedWithBloombergReferer() {
+  const result = runSurgeScript(GUARDED_REQUEST_OUTPUT_PATH, {
+    $argument: "site=bloomberg",
+    $request: {
+      url: "https://assets.bwbx.io/s3/fence/fortress-client/main.css",
+      headers: {
+        Accept: "text/css,*/*",
+        Referer: "https://www.bloomberg.com/news/articles/example",
+        "Sec-Fetch-Dest": "style"
+      }
+    }
+  });
+
+  assertBlocked(result, "bloomberg-fortress-client-css");
+  assert.strictEqual(result.response.headers["Content-Type"], "text/css; charset=utf-8");
 }
 
 function testBloombergFortressWithoutBloombergRefererPassesThrough() {
@@ -498,8 +515,9 @@ function testModuleMovesPureBlocksOutOfJavascript() {
   const moduleText = readGeneratedModule();
 
   assertIncludes(moduleText, "^https:\\/\\/(?:[^\\/]+\\.)?economist\\.com\\/zephr\\/feature _ reject");
-  assertIncludes(moduleText, "^https:\\/\\/(?:[^\\/]+\\.)?economist\\.com\\/(?:latest\\/wall-ui|script)\\.js(?:[?#]|$) _ reject");
-  assertIncludes(moduleText, "^https:\\/\\/www\\.theatlantic\\.com\\/zephr\\/ _ reject");
+  assertIncludes(moduleText, "^https:\\/\\/(?:[^\\/]+\\.)?economist\\.com\\/latest\\/wall-ui\\.js(?:[?#]|$) _ reject");
+  assertNotIncludes(moduleText, "(?:latest\\/wall-ui|script)");
+  assertIncludes(moduleText, "^https:\\/\\/www\\.theatlantic\\.com\\/zephr\\/decision-engine(?:[?#]|$) _ reject");
   assertIncludes(moduleText, "^https:\\/\\/meter-svc\\.nytimes\\.com\\/meter\\.js(?:[?#]|$) _ reject");
   assertIncludes(moduleText, "^https:\\/\\/(?:www\\.)?nytimes\\.com\\/svc\\/onsite-messaging\\/query(?:[?#]|$) _ reject");
   assertIncludes(moduleText, "^https:\\/\\/mwcm\\.nyt\\.com\\/.+\\.js(?:[?#]|$) _ reject");
@@ -521,8 +539,11 @@ function testModuleUsesGuardedHeadersForContextualHints() {
 function testModuleUsesBodyRewriteForCosmetics() {
   const moduleText = readGeneratedModule();
 
-  assertNotIncludes(moduleText, "surge-bpc-cosmetic:bloomberg");
+  assertIncludes(moduleText, "surge-bpc-cosmetic:bloomberg");
+  assertIncludes(moduleText, "div.adwrap");
+  assertIncludes(moduleText, "div[data-dev=\"MovableAd\"]");
   assertIncludes(moduleText, "surge-bpc-cosmetic:economist");
+  assertIncludes(moduleText, "div[class*=\"adComponent\"]");
   assertIncludes(moduleText, "adComponent_advert__");
   assertIncludes(moduleText, "adComponent_adcontainer__");
   assertIncludes(moduleText, "right-hand-rail-ads");
@@ -537,11 +558,16 @@ function testModuleUsesBodyRewriteForCosmetics() {
   assertIncludes(moduleText, "aside#paywall");
   assertIncludes(moduleText, "surge-bpc-cosmetic:nytimes");
   assertIncludes(moduleText, "div#dock-container");
+  assertIncludes(moduleText, "div[class^=\"css-\"]:has( > div[data-testid=\"StandardAd\"])");
   assertIncludes(moduleText, "surge-bpc-cosmetic:scmp");
   assertIncludes(moduleText, "GenericArticle-PaywallContainer");
   assertIncludes(moduleText, "surge-bpc-cosmetic:wsj");
   assertIncludes(moduleText, "cx-article-cover-overlay");
   assertIncludes(moduleText, "surge-bpc-cosmetic:washingtonpost");
+  assertIncludes(moduleText, "wp-ad-wrapper");
+  assertIncludes(moduleText, "div[data-component=\"Ad\"]");
+  assertIncludes(moduleText, "div[data-qa=\"outbrain\"]");
+  assertIncludes(moduleText, "div.PJLV-ifmxCWD-css");
   assertIncludes(moduleText, "subscribe-promo");
   assertIncludes(moduleText, "filter:none!important");
 }
@@ -984,7 +1010,8 @@ testGeneratedFilesAreCurrent();
 testGeneratedModulePassesSurgeParser();
 testBpcStyleDomainTemplatesAreUsed();
 testDomainTemplatesEscapeHostDots();
-testBloombergFortressIsBlockedWithBloombergReferer();
+testBloombergFortressScriptIsBlockedWithBloombergReferer();
+testBloombergFortressCssIsBlockedWithBloombergReferer();
 testBloombergFortressWithoutBloombergRefererPassesThrough();
 testEconomistLiskovUserAgentIsSetForScriptRequests();
 testEconomistFontRequestIsNotRewritten();

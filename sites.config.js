@@ -30,9 +30,20 @@ const config = {
       mitmHosts: ["{domain}", "*.{domain}", "*.bwbx.io"],
       guardedPattern: "^https://[^/]+\\.bwbx\\.io/s3/fence/fortress-client/",
       scriptName: "BloombergGuardedRequest",
+      hideSelectors: [
+        "div.adwrap",
+        "div[data-dev=\"MovableAd\"]"
+      ],
       guardedBlocks: [
         {
-          name: "bloomberg-fortress-client",
+          name: "bloomberg-fortress-client-css",
+          match: "^https://[^/]+\\.bwbx\\.io/s3/fence/fortress-client/.+\\.css(?:[?#]|$)",
+          requireRefererDomains: ["{domain}"],
+          destinations: ["style"],
+          contentType: "text/css; charset=utf-8"
+        },
+        {
+          name: "bloomberg-fortress-client-script",
           match: "^https://[^/]+\\.bwbx\\.io/s3/fence/fortress-client/",
           requireRefererDomains: ["{domain}"],
           destinations: ["script", "empty"],
@@ -48,7 +59,7 @@ const config = {
       mitmHosts: ["{domain}", "*.{domain}"],
       blockRules: [
         "^https://(?:[^/]+\\.)?{domain}/zephr/feature",
-        "^https://(?:[^/]+\\.)?{domain}/(?:latest/wall-ui|script)\\.js(?:[?#]|$)"
+        "^https://(?:[^/]+\\.)?{domain}/latest/wall-ui\\.js(?:[?#]|$)"
       ],
       guardedHeaders: [
         {
@@ -61,6 +72,7 @@ const config = {
         }
       ],
       hideSelectors: [
+        "div[class*=\"adComponent\"]",
         "div[class^=\"adComponent_advert__\"]",
         "div[class^=\"adComponent_adcontainer__\"]",
         "div[data-testid=\"right-hand-rail-ads\"]",
@@ -106,7 +118,7 @@ const config = {
       htmlHosts: ["www"],
       mitmHosts: ["www.{domain}"],
       blockRules: [
-        "^https://www.{domain}/zephr/"
+        "^https://www.{domain}/zephr/decision-engine(?:[?#]|$)"
       ],
       hideSelectors: [
         "aside#paywall",
@@ -142,7 +154,8 @@ const config = {
         "div#bottom-wrapper",
         "div[class$=\"ad-wrapper\"]",
         "div[class^=\"adunit_\"]",
-        "div[data-testid^=\"Dropzone-\"]"
+        "div[data-testid^=\"Dropzone-\"]",
+        "div[class^=\"css-\"]:has( > div[data-testid=\"StandardAd\"])"
       ]
     },
     {
@@ -226,7 +239,11 @@ const config = {
         }
       ],
       hideSelectors: [
+        "wp-ad-wrapper",
         "div[data-qa$=\"-ad\"]",
+        "div[data-component=\"Ad\"]",
+        "div[data-qa=\"outbrain\"]",
+        "div.PJLV-ifmxCWD-css",
         "div#leaderboard-wrapper",
         "div[data-qa=\"subscribe-promo\"]"
       ],
