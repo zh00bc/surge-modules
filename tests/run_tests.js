@@ -25,7 +25,7 @@ const {
   MODULE_OUTPUT_PATH: DICTIONARY_MODULE_OUTPUT_PATH
 } = require("../scripts/build_dictionary");
 const siteConfig = require("../sites.config");
-const ECONOMIST_LISKOV_UA = "Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36 Liskov";
+const ECONOMIST_LISKOV_UA = "Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Mobile Safari/537.36 Liskov";
 const GOOGLEBOT_UA = "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)";
 
 function readRepoFile(filename) {
@@ -142,7 +142,7 @@ function testDomainTemplatesEscapeHostDots() {
   assertIncludes(moduleText, "^https:\\/\\/(?:[^\\/]+\\.)?washingtonpost\\.com\\/.+\\/tetro-client\\/ _ reject");
 }
 
-function testBloombergFortressScriptIsBlockedWithBloombergReferer() {
+function testBloombergFortressScriptPassesThrough() {
   const result = runSurgeScript(GUARDED_REQUEST_OUTPUT_PATH, {
     $argument: "site=bloomberg",
     $request: {
@@ -155,7 +155,7 @@ function testBloombergFortressScriptIsBlockedWithBloombergReferer() {
     }
   });
 
-  assertBlocked(result, "bloomberg-fortress-client-script");
+  assertPlainEmptyObject(result);
 }
 
 function testBloombergFortressCssIsBlockedWithBloombergReferer() {
@@ -179,11 +179,11 @@ function testBloombergFortressWithoutBloombergRefererPassesThrough() {
   const result = runSurgeScript(GUARDED_REQUEST_OUTPUT_PATH, {
     $argument: "site=bloomberg",
     $request: {
-      url: "https://assets.bwbx.io/s3/fence/fortress-client/main.js",
+      url: "https://assets.bwbx.io/s3/fence/fortress-client/main.css",
       headers: {
         Accept: "*/*",
         Referer: "https://example.com/",
-        "Sec-Fetch-Dest": "script"
+        "Sec-Fetch-Dest": "style"
       }
     }
   });
@@ -205,6 +205,41 @@ function testEconomistLiskovUserAgentIsSetForScriptRequests() {
   });
 
   assert.strictEqual(result.headers["User-Agent"], ECONOMIST_LISKOV_UA);
+}
+
+function testUpdatedRuleBoundaries() {
+  const moduleText = readGeneratedModule();
+  const bloomberg = moduleText.split("\n").find(line => line.startsWith("BloombergGuardedRequest ="));
+  const trigger = new RegExp(bloomberg.match(/pattern=(.*?), script-path=/)[1]);
+  assert.ok(trigger.test("https://assets.bwbx.io/s3/fence/fortress-client/main.css?v=2"));
+  assert.ok(!trigger.test("https://assets.bwbx.io/s3/fence/fortress-client/main.js"));
+  assert.ok(!trigger.test("https://assets.bwbx.io/s3/fence/fortress-client/font.woff2"));
+
+  for (const headers of [
+    { "Sec-Fetch-Dest": "document", Accept: "text/html", Referer: "https://www.bloomberg.com/" },
+    { "Sec-Fetch-Dest": "style", Referer: "https://bloomberg.com.example.org/" },
+    { "Sec-Fetch-Dest": "style" }
+  ]) {
+    assertPlainEmptyObject(runSurgeScript(GUARDED_REQUEST_OUTPUT_PATH, {
+      $argument: "site=bloomberg",
+      $request: { url: "https://assets.bwbx.io/s3/fence/fortress-client/main.css", headers }
+    }));
+  }
+
+  const rules = moduleText.split("\n").filter(line => line.endsWith(" _ reject"))
+    .map(line => new RegExp(line.slice(0, -" _ reject".length)));
+  for (const pathname of ["script.js", "script.js?v=2", "latest/wall-ui.js"]) {
+    assert.ok(rules.some(rule => rule.test(`https://www.economist.com/${pathname}`)), pathname);
+  }
+  for (const url of [
+    "https://www.economist.com/script.json",
+    "https://www.economist.com/script.js.map",
+    "https://www.economist.com/latest/app.js",
+    "https://www.economist.com/fonts/econ.woff2",
+    "https://www.economist.com.example.org/script.js"
+  ]) {
+    assert.ok(!rules.some(rule => rule.test(url)), url);
+  }
 }
 
 function testEconomistFontRequestIsNotRewritten() {
@@ -515,8 +550,7 @@ function testModuleMovesPureBlocksOutOfJavascript() {
   const moduleText = readGeneratedModule();
 
   assertIncludes(moduleText, "^https:\\/\\/(?:[^\\/]+\\.)?economist\\.com\\/zephr\\/feature _ reject");
-  assertIncludes(moduleText, "^https:\\/\\/(?:[^\\/]+\\.)?economist\\.com\\/latest\\/wall-ui\\.js(?:[?#]|$) _ reject");
-  assertNotIncludes(moduleText, "(?:latest\\/wall-ui|script)");
+  assertIncludes(moduleText, "^https:\\/\\/(?:[^\\/]+\\.)?economist\\.com\\/(?:latest\\/wall-ui|script)\\.js(?:[?#]|$) _ reject");
   assertIncludes(moduleText, "^https:\\/\\/www\\.theatlantic\\.com\\/zephr\\/decision-engine(?:[?#]|$) _ reject");
   assertIncludes(moduleText, "^https:\\/\\/meter-svc\\.nytimes\\.com\\/meter\\.js(?:[?#]|$) _ reject");
   assertIncludes(moduleText, "^https:\\/\\/(?:www\\.)?nytimes\\.com\\/svc\\/onsite-messaging\\/query(?:[?#]|$) _ reject");
@@ -540,12 +574,14 @@ function testModuleUsesBodyRewriteForCosmetics() {
   const moduleText = readGeneratedModule();
 
   assertIncludes(moduleText, "surge-bpc-cosmetic:bloomberg");
-  assertIncludes(moduleText, "div.adwrap");
-  assertIncludes(moduleText, "div[data-dev=\"MovableAd\"]");
+  assertIncludes(moduleText, "div[data-ad-status]");
+  assertIncludes(moduleText, "div[data-ad-type]");
+  assertIncludes(moduleText, "div[class*=\"FullWidthAd_\"]");
+  assertIncludes(moduleText, "div.dvz-v0-ad");
+  assertNotIncludes(moduleText, "div.adwrap");
+  assertNotIncludes(moduleText, "div[data-dev=\"MovableAd\"]");
   assertIncludes(moduleText, "surge-bpc-cosmetic:economist");
   assertIncludes(moduleText, "div[class*=\"adComponent\"]");
-  assertIncludes(moduleText, "adComponent_advert__");
-  assertIncludes(moduleText, "adComponent_adcontainer__");
   assertIncludes(moduleText, "right-hand-rail-ads");
   assertIncludes(moduleText, "surge-bpc-cosmetic:newyorker");
   assertNotIncludes(moduleText, "font-family");
@@ -561,6 +597,8 @@ function testModuleUsesBodyRewriteForCosmetics() {
   assertIncludes(moduleText, "div[class^=\"css-\"]:has( > div[data-testid=\"StandardAd\"])");
   assertIncludes(moduleText, "surge-bpc-cosmetic:scmp");
   assertIncludes(moduleText, "GenericArticle-PaywallContainer");
+  assertIncludes(moduleText, "div[data-qa*=\"AdSlot\"]");
+  assertIncludes(moduleText, "div.adblock-message");
   assertIncludes(moduleText, "surge-bpc-cosmetic:wsj");
   assertIncludes(moduleText, "cx-article-cover-overlay");
   assertIncludes(moduleText, "surge-bpc-cosmetic:washingtonpost");
@@ -1010,9 +1048,10 @@ testGeneratedFilesAreCurrent();
 testGeneratedModulePassesSurgeParser();
 testBpcStyleDomainTemplatesAreUsed();
 testDomainTemplatesEscapeHostDots();
-testBloombergFortressScriptIsBlockedWithBloombergReferer();
+testBloombergFortressScriptPassesThrough();
 testBloombergFortressCssIsBlockedWithBloombergReferer();
 testBloombergFortressWithoutBloombergRefererPassesThrough();
+testUpdatedRuleBoundaries();
 testEconomistLiskovUserAgentIsSetForScriptRequests();
 testEconomistFontRequestIsNotRewritten();
 testNewYorkerDocumentNavigationIsNotBlocked();

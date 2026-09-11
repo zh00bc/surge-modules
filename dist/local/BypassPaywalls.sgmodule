@@ -7,7 +7,7 @@
 [URL Rewrite]
 # Pure URL blocks from the BPC site rules.
 ^https:\/\/(?:[^\/]+\.)?economist\.com\/zephr\/feature _ reject
-^https:\/\/(?:[^\/]+\.)?economist\.com\/latest\/wall-ui\.js(?:[?#]|$) _ reject
+^https:\/\/(?:[^\/]+\.)?economist\.com\/(?:latest\/wall-ui|script)\.js(?:[?#]|$) _ reject
 ^https:\/\/www\.theatlantic\.com\/zephr\/decision-engine(?:[?#]|$) _ reject
 ^https:\/\/meter-svc\.nytimes\.com\/meter\.js(?:[?#]|$) _ reject
 ^https:\/\/(?:www\.)?nytimes\.com\/svc\/onsite-messaging\/query(?:[?#]|$) _ reject
@@ -46,18 +46,18 @@ http-response ^https:\/\/(?:www\.)?washingtonpost\.com\/(?!.*\.(?:css|js|mjs|jso
 
 [Body Rewrite]
 # CSS-only cosmetics. No runtime DOM mutation, so hydration stays under the site's control.
-http-response ^https:\/\/(?:www\.)?bloomberg\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) </head> <!--surge-bpc-cosmetic:bloomberg--><style>div.adwrap,div[data-dev="MovableAd"]{display:none!important}</style></head>
-http-response ^https:\/\/(?:www\.)?economist\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) </head> <!--surge-bpc-cosmetic:economist--><style>div[class*="adComponent"],div[class^="adComponent_advert__"],div[class^="adComponent_adcontainer__"],div[data-testid="right-hand-rail-ads"],div#airship-masthead-banner,div[id^="econ-"],div[id^="econtop-"],div[id^="econright-"]{display:none!important}</style></head>
+http-response ^https:\/\/(?:www\.)?bloomberg\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) </head> <!--surge-bpc-cosmetic:bloomberg--><style>div[data-ad-status],div[data-ad-type],div[class*="FullWidthAd_"],div.adWrapper,div.dvz-v0-ad{display:none!important}</style></head>
+http-response ^https:\/\/(?:www\.)?economist\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) </head> <!--surge-bpc-cosmetic:economist--><style>div[class*="adComponent"],div[data-testid="right-hand-rail-ads"],div#airship-masthead-banner,div[id^="econ-"],div[id^="econtop-"],div[id^="econright-"]{display:none!important}</style></head>
 http-response ^https:\/\/www\.newyorker\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) </head> <!--surge-bpc-cosmetic:newyorker--><style>div.ad,div[class*="AdWrapper-"],div[class*="StickyMidContentAdWrapper-"],div[class*="AdsSpacer-"],aside.paywall-bar,div[class^="MessageBannerWrapper-"],div.ad-stickyhero,div.ad_wrapper{display:none!important}</style></head>
 http-response ^https:\/\/www\.theatlantic\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) </head> <!--surge-bpc-cosmetic:theatlantic--><style>aside#paywall,div[class^="LostInventoryMessage_"]{display:none!important}</style></head>
 http-response ^https:\/\/(?:www\.)?nytimes\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) </head> <!--surge-bpc-cosmetic:nytimes--><style>div#dock-container,div#top-wrapper,div#bottom-wrapper,div[class$="ad-wrapper"],div[class^="adunit_"],div[data-testid^="Dropzone-"],div[class^="css-"]:has( > div[data-testid="StandardAd"]){display:none!important}</style></head>
-http-response ^https:\/\/(?:(?:www|amp)\.)?scmp\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) </head> <!--surge-bpc-cosmetic:scmp--><style>div[data-qa="GenericArticle-PaywallContainer"],div.js-reading-0-percent-completion-tracker,div[id^="default-meter-page-views"],div.ad-banner,div.advert-fly-carpet-container,div.inline-advert{display:none!important}</style></head>
+http-response ^https:\/\/(?:(?:www|amp)\.)?scmp\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) </head> <!--surge-bpc-cosmetic:scmp--><style>div[data-qa="GenericArticle-PaywallContainer"],div.js-reading-0-percent-completion-tracker,div[id^="default-meter-page-views"],div.ad-banner,div.advert-fly-carpet-container,div.inline-advert,div[data-qa*="AdSlot"],div.adblock-message{display:none!important}</style></head>
 http-response ^https:\/\/(?:www\.)?wsj\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) </head> <!--surge-bpc-cosmetic:wsj--><style>.snippet-promotion,div[id*="-snippet-overlay"],div.wsj-ad,div.adWrapper,div.css-xgokil-Box,div#cx-article-cover-overlay,div#dianomi-module{display:none!important}</style></head>
 http-response ^https:\/\/(?:www\.)?washingtonpost\.com\/(?!.*\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|m4v|mov|m3u8|ts|mp3|aac|pdf)(?:[?#]|$)) </head> <!--surge-bpc-cosmetic:washingtonpost--><style>wp-ad-wrapper,div[data-qa$="-ad"],div[data-component="Ad"],div[data-qa="outbrain"],div.PJLV-ifmxCWD-css,div#leaderboard-wrapper,div[data-qa="subscribe-promo"]{display:none!important}img,div.aspect-custom,div.aspect-custom>*{filter:none!important}</style></head>
 
 [Script]
 # Only contexts that Surge's declarative rules cannot express stay in JS.
-BloombergGuardedRequest = type=http-request, pattern=^https:\/\/[^\/]+\.bwbx\.io\/s3\/fence\/fortress-client\/, script-path=BypassPaywalls/guarded_request.js, argument=site=bloomberg, timeout=3
+BloombergGuardedRequest = type=http-request, pattern=^https:\/\/[^\/]+\.bwbx\.io\/s3\/fence\/fortress-client\/.+\.css(?:[?#]|$), script-path=BypassPaywalls/guarded_request.js, argument=site=bloomberg, timeout=3
 EconomistGuardedRequest = type=http-request, pattern=^https:\/\/(?:[^\/]+\.)?economist\.com\/, script-path=BypassPaywalls/guarded_request.js, argument=site=economist, timeout=3
 NewYorkerGuardedRequest = type=http-request, pattern=^https:\/\/www\.newyorker\.com\/[-\w]+$, script-path=BypassPaywalls/guarded_request.js, argument=site=newyorker, timeout=3
 NewYorkTimesGuardedRequest = type=http-request, pattern=^https:\/\/(?:www\.)?nytimes\.com\/(?!games\/), script-path=BypassPaywalls/guarded_request.js, argument=site=nytimes, timeout=3

@@ -2,7 +2,7 @@ const HTML_ASSET_EXCLUSION = "(?!.*\\.(?:css|js|mjs|json|xml|png|jpe?g|gif|webp|
 
 const BPC_HEADER_DESTINATIONS = ["document", "iframe", "empty", "script"];
 const GOOGLEBOT_UA = "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)";
-const ECONOMIST_LISKOV_UA = "Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36 Liskov";
+const ECONOMIST_LISKOV_UA = "Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Mobile Safari/537.36 Liskov";
 
 const RESPONSE_HEADER_DELETES = [
   "Content-Length",
@@ -28,11 +28,13 @@ const config = {
       domain: "bloomberg.com",
       htmlHosts: ["", "www"],
       mitmHosts: ["{domain}", "*.{domain}", "*.bwbx.io"],
-      guardedPattern: "^https://[^/]+\\.bwbx\\.io/s3/fence/fortress-client/",
       scriptName: "BloombergGuardedRequest",
       hideSelectors: [
-        "div.adwrap",
-        "div[data-dev=\"MovableAd\"]"
+        "div[data-ad-status]",
+        "div[data-ad-type]",
+        "div[class*=\"FullWidthAd_\"]",
+        "div.adWrapper",
+        "div.dvz-v0-ad"
       ],
       guardedBlocks: [
         {
@@ -41,13 +43,6 @@ const config = {
           requireRefererDomains: ["{domain}"],
           destinations: ["style"],
           contentType: "text/css; charset=utf-8"
-        },
-        {
-          name: "bloomberg-fortress-client-script",
-          match: "^https://[^/]+\\.bwbx\\.io/s3/fence/fortress-client/",
-          requireRefererDomains: ["{domain}"],
-          destinations: ["script", "empty"],
-          contentType: "application/javascript; charset=utf-8"
         }
       ]
     },
@@ -59,7 +54,7 @@ const config = {
       mitmHosts: ["{domain}", "*.{domain}"],
       blockRules: [
         "^https://(?:[^/]+\\.)?{domain}/zephr/feature",
-        "^https://(?:[^/]+\\.)?{domain}/latest/wall-ui\\.js(?:[?#]|$)"
+        "^https://(?:[^/]+\\.)?{domain}/(?:latest/wall-ui|script)\\.js(?:[?#]|$)"
       ],
       guardedHeaders: [
         {
@@ -73,8 +68,6 @@ const config = {
       ],
       hideSelectors: [
         "div[class*=\"adComponent\"]",
-        "div[class^=\"adComponent_advert__\"]",
-        "div[class^=\"adComponent_adcontainer__\"]",
         "div[data-testid=\"right-hand-rail-ads\"]",
         "div#airship-masthead-banner",
         "div[id^=\"econ-\"]",
@@ -170,7 +163,9 @@ const config = {
         "div[id^=\"default-meter-page-views\"]",
         "div.ad-banner",
         "div.advert-fly-carpet-container",
-        "div.inline-advert"
+        "div.inline-advert",
+        "div[data-qa*=\"AdSlot\"]",
+        "div.adblock-message"
       ],
       guardedPattern: "^https://(?:[^/]+\\.)?tinypass\\.com/|^https://cdn\\.ampproject\\.org/v0/amp-(?:access|subscriptions)-",
       scriptName: "ScmpGuardedRequest",

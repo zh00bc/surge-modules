@@ -62,14 +62,28 @@ These modules borrow the shape of two reference projects without copying their i
 
 ## Site Strategy
 
-- Bloomberg: blocks BPC's latest `bwbx.io/s3/fence/fortress-client/*.css` stylesheet rule only when initiated by Bloomberg, keeps the existing guarded fortress script block for the Surge path, and hides Bloomberg ad wrappers with CSS-only cleanup.
-- The Economist: blocks BPC's Zephr feature endpoint and `latest/wall-ui.js`, applies BPC's Liskov mobile user agent to document/script/XHR-like requests only, and uses the current generic `adComponent` cosmetic selector.
+- Bloomberg: blocks BPC's `bwbx.io/s3/fence/fortress-client/*.css` stylesheet rule only when initiated by Bloomberg. Fortress JavaScript is left intact. Cosmetic selectors come from BPC's Bloomberg branch, not the preceding site's branch.
+- The Economist: blocks BPC's Zephr feature endpoint, `latest/wall-ui.js`, and root `script.js`; applies the Firefox release's Liskov mobile user agent to document/script/XHR-like requests only, and uses the generic `adComponent` cosmetic selector.
 - New Yorker: BPC-style root script block plus CSS-only ad/paywall-bar hiding. No runtime DOM cleanup.
 - The Atlantic: native URL Rewrite blocks BPC's current Zephr `decision-engine` endpoint plus light CSS fallback.
 - New York Times: native URL Rewrite blocks meter, onsite messaging, `mwcm.nyt.com`, and Cooking access; document requests use BPC's Google Inspection Tool user agent. Games paths are excluded. Cosmetic cleanup includes BPC's current standard ad dropzone selector.
 - South China Morning Post: Tinypass and AMP access/subscription scripts are blocked only when the referer is SCMP; response cleanup is CSS-only.
 - Wall Street Journal: BPC's Drudge referer is applied through a guarded request rule, so asset requests are not rewritten.
 - The Washington Post: blocks BPC's `tetro-client` path, applies BPC's Googlebot headers to document/script/XHR-like requests only, and follows the current WaPo ad/outbrain selectors.
+
+### Upstream audit — 2026-09-11
+
+Checked the actual files, not just release notes:
+
+- [BPC filters](https://gitflic.ru/project/magnolia1234/bypass-paywalls-clean-filters): `8a8e15e4280a313974fd264c1deea5534aac52a2` (2026-09-08), `bpc-paywall-filter.txt` and the corresponding site branches in `userscript/bpc.en.user.js`.
+- [BPC Firefox](https://gitflic.ru/project/magnolia1234/bypass-paywalls-firefox-clean): `123f38f10fe81ec5e400d897f797da81af56bc51` (2026-09-08). This checkout contains documentation/changelog only; executable rules were inspected separately in the [official latest XPI](https://gitflic.ru/project/magnolia1234/bpc_uploads/blob/raw?file=bypass_paywalls_clean-latest.xpi), manifest version `4.4.4.2`, `sites.js` and `background.js`. Download SHA-256: `fdb8650f55911ab4bcb70beb02858e8a045a806bc4e061d21c0e939d5cb5a6a6`.
+- [Periscope](https://github.com/reynaldichernando/periscope): `250bfbfb798437402c47f494aa2f1488e5636d74` (2024-12-21), `public/ruleset.yaml`; unchanged from the previous audit.
+
+Corrections: replaced misattributed Bloomberg ad selectors, removed its obsolete blanket fortress script block, restored Economist's root `script.js` rule from the extension (absent from the filter list), updated its Liskov UA to Chrome/150.0.0.0, removed redundant Economist selectors covered by `adComponent`, and added SCMP's `AdSlot`/`adblock-message` cosmetics. New Yorker, NYTimes, The Atlantic, WSJ and Washington Post rules are unchanged.
+
+Deliberate differences: The Atlantic keeps the narrower filter-list `decision-engine` rule instead of the extension's entire `/zephr/` prefix. Request-type/referer guards remain Surge-specific. BPC userscripts also reconstruct Bloomberg/SCMP content and fetch archive versions for some Economist/WSJ/Washington Post pages; this module does **not** implement those paths. Hiding a paywall or passing rule tests does not establish that a complete article is available. This audit is source/rule validation, not a live-browser full-article verification of all eight sites.
+
+The upstream GitFlic checkouts currently expose only a release snapshot, so this audit compares the snapshot with our checked-in rules; it does not claim a complete upstream commit-by-commit diff.
 
 ## Workflow
 

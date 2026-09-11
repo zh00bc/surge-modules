@@ -14,19 +14,6 @@ const SITE_RULES = {
         ],
         "requireDestination": false,
         "contentType": "text/css; charset=utf-8"
-      },
-      {
-        "name": "bloomberg-fortress-client-script",
-        "pattern": "^https://[^/]+\\.bwbx\\.io/s3/fence/fortress-client/",
-        "requireRefererDomains": [
-          "bloomberg.com"
-        ],
-        "destinations": [
-          "script",
-          "empty"
-        ],
-        "requireDestination": false,
-        "contentType": "application/javascript; charset=utf-8"
       }
     ],
     "requestHeaders": []
@@ -46,7 +33,7 @@ const SITE_RULES = {
         ],
         "pattern": "^https://(?:[^/]+\\.)?economist\\.com/",
         "set": {
-          "User-Agent": "Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36 Liskov"
+          "User-Agent": "Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Mobile Safari/537.36 Liskov"
         }
       }
     ]
