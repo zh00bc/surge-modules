@@ -85,7 +85,13 @@ function buildStyle(site) {
 }
 
 function buildBodyRewrite(site) {
-  return `http-response ${htmlPattern(site)} </head> <!--surge-bpc-cosmetic:${site.id}-->${buildStyle(site)}</head>`;
+  const replacement = `<!--surge-bpc-cosmetic:${site.id}-->${buildStyle(site)}</head>`;
+  // Surge parses whitespace-separated regex/replacement pairs. A stray space
+  // can silently become a second replacement, even when --check passes.
+  if (/\s/.test(replacement)) {
+    throw new Error(`${site.id}: Body Rewrite replacement must not contain whitespace`);
+  }
+  return `http-response ${htmlPattern(site)} </head> ${replacement}`;
 }
 
 function buildUrlRewriteLines() {

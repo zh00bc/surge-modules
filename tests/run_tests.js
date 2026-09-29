@@ -94,6 +94,27 @@ function testGeneratedFilesAreCurrent() {
   assert.strictEqual(readRepoFile(DICTIONARY_INJECTOR_OUTPUT_PATH), buildDictionaryInjector());
 }
 
+function testBodyRewriteHasExactlyOneReplacementPair() {
+  const section = readGeneratedModule().split("[Body Rewrite]\n")[1].split("\n[")[0];
+  const input = '<html><head><title>Test</title></head><body><p>Article</p></body></html>';
+  for (const line of section.split("\n").filter(line => line.startsWith("http-response "))) {
+    const tokens = line.split(/\s+/);
+    assert.strictEqual(tokens.length, 4, `Unexpected extra rewrite pair: ${line}`);
+    assert.strictEqual(tokens[2], '</head>');
+    const output = input.replace(new RegExp(tokens[2], 'g'), () => tokens[3]);
+    assert.ok(output.startsWith('<html><head><title>Test</title>'));
+    assert.ok(output.endsWith('</head><body><p>Article</p></body></html>'));
+    assert.strictEqual(output.split('<style>').length - 1, 1);
+  }
+  const site = siteConfig.sites.find(site => site.id === 'nytimes');
+  site.hideSelectors.push('div.article > p');
+  try {
+    assert.throws(() => buildBypassModule(), /nytimes: Body Rewrite replacement must not contain whitespace/);
+  } finally {
+    site.hideSelectors.pop();
+  }
+}
+
 function testModulePassesSurgeParser(moduleText, profileName) {
   const surgeCli = "/Applications/Surge.app/Contents/Applications/surge-cli";
 
@@ -594,7 +615,7 @@ function testModuleUsesBodyRewriteForCosmetics() {
   assertIncludes(moduleText, "aside#paywall");
   assertIncludes(moduleText, "surge-bpc-cosmetic:nytimes");
   assertIncludes(moduleText, "div#dock-container");
-  assertIncludes(moduleText, "div[class^=\"css-\"]:has( > div[data-testid=\"StandardAd\"])");
+  assertIncludes(moduleText, "div[class^=\"css-\"]:has(>div[data-testid=\"StandardAd\"])");
   assertIncludes(moduleText, "surge-bpc-cosmetic:scmp");
   assertIncludes(moduleText, "GenericArticle-PaywallContainer");
   assertIncludes(moduleText, "div[data-qa*=\"AdSlot\"]");
@@ -1045,6 +1066,7 @@ function testDictionaryInjectorIsIdempotent() {
 }
 
 testGeneratedFilesAreCurrent();
+testBodyRewriteHasExactlyOneReplacementPair();
 testGeneratedModulePassesSurgeParser();
 testBpcStyleDomainTemplatesAreUsed();
 testDomainTemplatesEscapeHostDots();

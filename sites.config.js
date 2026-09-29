@@ -148,7 +148,7 @@ const config = {
         "div[class$=\"ad-wrapper\"]",
         "div[class^=\"adunit_\"]",
         "div[data-testid^=\"Dropzone-\"]",
-        "div[class^=\"css-\"]:has( > div[data-testid=\"StandardAd\"])"
+        "div[class^=\"css-\"]:has(>div[data-testid=\"StandardAd\"])"
       ]
     },
     {
